@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Face Recognition Test</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    h2 { color: #333; }
+    #result { margin-top: 20px; font-size: 1.2em; color: green; }
+  </style>
+</head>
+<body>
+  <h2>🔍 Face Recognition Tester</h2>
+  <form id="uploadForm">
+    <input type="file" id="imageInput" name="image" accept="image/*" required><br><br>
+    <button type="submit">Upload & Recognize</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const resultDiv = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('imageInput');
+      const formData = new FormData();
+      formData.append('image', fileInput.files[0]);
+
+      const response = await fetch('/recognize', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+      resultDiv.textContent = "Hasil: " + (result.nama || result.error);
+    });
+  </script>
+</body>
+</html>
